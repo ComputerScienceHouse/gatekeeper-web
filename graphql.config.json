@@ -1,0 +1,13 @@
+{
+  "endpoints": [
+    {
+      "name": "Local (http://localhost:8000/graphql)",
+      "url": "http://localhost:8000/graphql",
+      "options": {
+        "headers": {
+          "user-agent": "JetBrains GraphQL"
+        }
+      }
+    }
+  ]
+}
