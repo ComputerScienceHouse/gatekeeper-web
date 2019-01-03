@@ -56,7 +56,7 @@ class ConfirmDialog extends React.Component<ConfirmDialogProps, ConfirmDialogSta
     const { title, body, callToAction, callToActionColor, children, className } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         {children(this.toggle)}
         <Modal isOpen={this.state.open} toggle={this.toggle} className={className}>
           {title && (
@@ -82,7 +82,7 @@ class ConfirmDialog extends React.Component<ConfirmDialogProps, ConfirmDialogSta
             </Button>
           </ModalFooter>
         </Modal>
-      </React.Fragment>
+      </>
     );
   }
 }

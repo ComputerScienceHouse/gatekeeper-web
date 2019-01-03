@@ -92,7 +92,7 @@ class AccessPointForm extends React.Component<AccessPointFormProps> {
     const isUpdate = accessPoint != null;
 
     return (
-      <React.Fragment>
+      <>
         {isUpdate && (
           <FormGroup>
             <Label>Status</Label>
@@ -124,7 +124,7 @@ class AccessPointForm extends React.Component<AccessPointFormProps> {
           selected={['foo']}
           sortable={false}
         />
-      </React.Fragment>
+      </>
     );
   };
 }

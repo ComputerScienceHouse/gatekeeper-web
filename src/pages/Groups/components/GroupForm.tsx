@@ -77,9 +77,9 @@ class GroupForm extends React.Component<GroupFormProps> {
   }
 
   private renderFormBody = () => (
-    <React.Fragment>
+    <>
       <FormFieldInput name="name" label="Name"/>
-    </React.Fragment>
+    </>
   );
 };
 

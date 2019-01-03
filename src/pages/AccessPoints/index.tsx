@@ -7,7 +7,7 @@ import AccessPointList from "./components/AccessPointList";
 class AccessPoints extends React.Component<RouteComponentProps<{}>> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <h2>
           Access Points
           <Button
@@ -20,7 +20,7 @@ class AccessPoints extends React.Component<RouteComponentProps<{}>> {
           </Button>
         </h2>
         <AccessPointList/>
-      </React.Fragment>
+      </>
     );
   }
 

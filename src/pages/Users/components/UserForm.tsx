@@ -89,12 +89,12 @@ class UserForm extends React.Component<UserFormProps> {
   }
 
   private renderFormBody = () => (
-    <React.Fragment>
+    <>
       <FormFieldInput name="username" label="Username"/>
       <FormFieldInput name="firstName" label="First Name"/>
       <FormFieldInput name="lastName" label="Last Name"/>
       <FormFieldInput name="email" label="Email Address"/>
-    </React.Fragment>
+    </>
   );
 }
 

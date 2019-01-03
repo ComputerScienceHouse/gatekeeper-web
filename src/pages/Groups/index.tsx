@@ -7,7 +7,7 @@ import GroupList from "./components/GroupList";
 class Groups extends React.Component<RouteComponentProps<{}>> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <h2>
           Groups
           <Button
@@ -20,7 +20,7 @@ class Groups extends React.Component<RouteComponentProps<{}>> {
           </Button>
         </h2>
         <GroupList/>
-      </React.Fragment>
+      </>
     );
   }
 

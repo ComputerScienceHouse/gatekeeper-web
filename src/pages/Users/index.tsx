@@ -7,7 +7,7 @@ import UserList from "./components/UserList";
 class Users extends React.Component<RouteComponentProps<{}>> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <h2>
           Users
           <Button
@@ -20,7 +20,7 @@ class Users extends React.Component<RouteComponentProps<{}>> {
           </Button>
         </h2>
         <UserList/>
-      </React.Fragment>
+      </>
     );
   }
 

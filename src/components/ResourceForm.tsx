@@ -77,20 +77,20 @@ class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
           // Return to the resource list
           history.push(baseUrl);
           toast.success((
-            <React.Fragment>
+            <>
               <FaCheck/>
               {resourceName} successfully updated.
-            </React.Fragment>
+            </>
           ));
         } else {
           // Redirect to the newly created resource, if successful
           if (data.mutated[fieldName] != null && data.mutated[fieldName]!.id != null) {
             history.push(`${baseUrl}/${data.mutated[fieldName]!.id}`);
             toast.success((
-              <React.Fragment>
+              <>
                 <FaCheck/>
                 {resourceName} successfully created.
-              </React.Fragment>
+              </>
             ));
           }
         }
@@ -108,10 +108,10 @@ class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
       .then(() => {
         history.push(baseUrl);
         toast.success((
-          <React.Fragment>
+          <>
             <FaCheck/>
             {resourceName} successfully deleted.
-          </React.Fragment>
+          </>
         ));
       })
       .catch((error: Error) => {
@@ -148,10 +148,10 @@ class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
                     title="Confirm Deletion"
                     body={`Are you sure you want to delete this ${resourceName}?`}
                     callToAction={(
-                      <React.Fragment>
+                      <>
                         <FaTrashAlt/>
                         Delete
-                      </React.Fragment>
+                      </>
                     )}
                     callToActionColor="danger"
                     onConfirm={() => this.handleDelete(deleteResource)}

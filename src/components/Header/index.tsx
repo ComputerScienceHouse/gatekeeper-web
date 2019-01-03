@@ -23,46 +23,46 @@ const navLinks = [
   {
     exact: true,
     label: (
-      <React.Fragment>
+      <>
         <FaTachometerAlt/>
         Dashboard
-      </React.Fragment>
+      </>
     ),
     to: "/"
   },
   {
     label: (
-      <React.Fragment>
+      <>
         <FaUser/>
         Users
-      </React.Fragment>
+      </>
     ),
     to: "/users"
   },
   {
     label: (
-      <React.Fragment>
+      <>
         <FaUsers/>
         Groups
-      </React.Fragment>
+      </>
     ),
     to: "/groups"
   },
   {
     label: (
-      <React.Fragment>
+      <>
         <FaDoorOpen/>
         Access Points
-      </React.Fragment>
+      </>
     ),
     to: "/access-points"
   },
   {
     label: (
-      <React.Fragment>
+      <>
         <FaReceipt/>
         Logs
-      </React.Fragment>
+      </>
     ),
     to: "/logs"
   }
@@ -85,7 +85,7 @@ export default class Header extends React.Component<{}, IHeaderState> {
 
   public render() {
     return (
-      <React.Fragment>
+      <>
         <Navbar dark={true} color="dark" expand="md" fixed="top">
           <Container>
             <img src={logo} aria-hidden={true} height="38px"/>
@@ -114,7 +114,7 @@ export default class Header extends React.Component<{}, IHeaderState> {
             Breadcrumbs
           </Container>
         </Navbar>
-      </React.Fragment>
+      </>
     );
   }
 
