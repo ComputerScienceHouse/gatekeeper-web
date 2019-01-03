@@ -15,7 +15,8 @@ import {
   FaUser,
   FaUsers,
   FaDoorOpen,
-  FaReceipt
+  FaReceipt,
+  FaGlobe
 } from "react-icons/fa";
 import logo from "./logo.svg";
 
@@ -47,6 +48,15 @@ const navLinks = [
       </>
     ),
     to: "/groups"
+  },
+  {
+    label: (
+      <>
+        <FaGlobe/>
+        Realms
+      </>
+    ),
+    to: "/realms"
   },
   {
     label: (

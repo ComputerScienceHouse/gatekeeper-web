@@ -13,6 +13,8 @@ import Groups from "../pages/Groups/index";
 import UpdateGroup from "../pages/Groups/update";
 import AccessPoints from "../pages/AccessPoints/index";
 import UpdateAccessPoint from "../pages/AccessPoints/update";
+import Realms from "../pages/Realms/index";
+import UpdateRealm from "../pages/Realms/update";
 import Header from "./Header/index";
 
 // tslint:disable-next-line no-unused-expression
@@ -90,6 +92,8 @@ const App = () => (
         <Route path="/groups/:id" component={UpdateGroup}/>
         <Route exact={true} path="/access-points" component={AccessPoints}/>
         <Route path="/access-points/:id" component={UpdateAccessPoint}/>
+        <Route exact={true} path="/realms" component={Realms}/>
+        <Route path="/realms/:id" component={UpdateRealm}/>
       </AnimatedSwitch>
     </Container>
     <ToastContainer
