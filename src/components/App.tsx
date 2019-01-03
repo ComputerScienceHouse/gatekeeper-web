@@ -18,14 +18,14 @@
  * along with Gatekeeper.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react";
+/** @jsx jsx */
 import { Route } from "react-router-dom";
 import { spring, AnimatedSwitch } from "react-router-transition";
 import { Container } from "reactstrap";
 import { IconContext } from "react-icons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { css, injectGlobal } from "emotion";
+import { jsx, css, Global, ClassNames } from "@emotion/core";
 import Dashboard from "../pages/Dashboard/index";
 import Users from "../pages/Users/index";
 import UpdateUser from "../pages/Users/update";
@@ -37,8 +37,7 @@ import Realms from "../pages/Realms/index";
 import UpdateRealm from "../pages/Realms/update";
 import Header from "./Header/index";
 
-// tslint:disable-next-line no-unused-expression
-injectGlobal`
+const globalStyle = css`
   body {
     margin: 0;
     padding: 54.5px 0 0;
@@ -61,17 +60,6 @@ const switchStyle = css`
     width: 100%;
     overflow-y: auto;
   }
-`;
-
-const globalIconStyle = css`
-  margin-right: 5px;
-  position: relative;
-  bottom: 1px;
-`;
-
-const toastStyle = css`
-  min-height: initial;
-  padding: 10px;
 `;
 
 function glide(val: number) {
@@ -101,29 +89,47 @@ const transition = {
 };
 
 const App = () => (
-  <IconContext.Provider value={{ className: globalIconStyle }}>
-    <Header/>
-    <Container className={containerStyle}>
-      <AnimatedSwitch {...transition} className={switchStyle}>
-        <Route exact={true} path="/" component={Dashboard}/>
-        <Route exact={true} path="/users" component={Users}/>
-        <Route path="/users/:id" component={UpdateUser}/>
-        <Route exact={true} path="/groups" component={Groups}/>
-        <Route path="/groups/:id" component={UpdateGroup}/>
-        <Route exact={true} path="/access-points" component={AccessPoints}/>
-        <Route path="/access-points/:id" component={UpdateAccessPoint}/>
-        <Route exact={true} path="/realms" component={Realms}/>
-        <Route path="/realms/:id" component={UpdateRealm}/>
-      </AnimatedSwitch>
-    </Container>
-    <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={true}
-      closeButton={false}
-      bodyClassName={toastStyle}
-    />
-  </IconContext.Provider>
+  <ClassNames>
+    {({ css: styles }) => {
+      const globalIconStyle = styles`
+        margin-right: 5px;
+        position: relative;
+        bottom: 1px;
+      `;
+
+      const toastStyle = styles`
+        min-height: initial;
+        padding: 10px;
+      `;
+
+      return (
+        <IconContext.Provider value={{ className: globalIconStyle }}>
+          <Global styles={globalStyle}/>
+          <Header/>
+          <Container css={containerStyle}>
+            <AnimatedSwitch {...transition} css={switchStyle}>
+              <Route exact={true} path="/" component={Dashboard}/>
+              <Route exact={true} path="/users" component={Users}/>
+              <Route path="/users/:id" component={UpdateUser}/>
+              <Route exact={true} path="/groups" component={Groups}/>
+              <Route path="/groups/:id" component={UpdateGroup}/>
+              <Route exact={true} path="/access-points" component={AccessPoints}/>
+              <Route path="/access-points/:id" component={UpdateAccessPoint}/>
+              <Route exact={true} path="/realms" component={Realms}/>
+              <Route path="/realms/:id" component={UpdateRealm}/>
+            </AnimatedSwitch>
+          </Container>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={true}
+            closeButton={false}
+            bodyClassName={toastStyle}
+          />
+        </IconContext.Provider>
+      );
+    }}
+  </ClassNames>
 );
 
 export default App;
