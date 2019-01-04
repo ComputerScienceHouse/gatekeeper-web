@@ -39,6 +39,7 @@ import {
   FaGlobe,
   FaCog
 } from "react-icons/fa";
+import StatusBar from "../StatusBar";
 import logo from "./logo.svg";
 
 const navLinks = [
@@ -151,7 +152,7 @@ export default class Header extends React.Component<{}, IHeaderState> {
         </Navbar>
         <Navbar light={true} color="light" expand="md">
           <Container>
-            Breadcrumbs
+            <StatusBar/>
           </Container>
         </Navbar>
       </>
