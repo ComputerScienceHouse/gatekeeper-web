@@ -35,6 +35,7 @@ import AccessPoints from "../pages/AccessPoints/index";
 import UpdateAccessPoint from "../pages/AccessPoints/update";
 import Realms from "../pages/Realms/index";
 import UpdateRealm from "../pages/Realms/update";
+import Settings from "../pages/Settings/index";
 import Header from "./Header/index";
 
 const globalStyle = css`
@@ -117,6 +118,7 @@ const App = () => (
               <Route path="/access-points/:id" component={UpdateAccessPoint}/>
               <Route exact={true} path="/realms" component={Realms}/>
               <Route path="/realms/:id" component={UpdateRealm}/>
+              <Route exact={true} path="/settings" component={Settings}/>
             </AnimatedSwitch>
           </Container>
           <ToastContainer

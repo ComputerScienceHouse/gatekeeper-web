@@ -18,16 +18,6 @@
  * along with Gatekeeper.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import User from "./User";
-import Group from "./Group";
-import AccessPoint from "./AccessPoint";
-import Realm from "./Realm";
-import Configuration from "./Configuration";
-
-export {
-  User,
-  Group,
-  AccessPoint,
-  Realm,
-  Configuration
-};
+export default interface Configuration {
+  systemSecret: string;
+}

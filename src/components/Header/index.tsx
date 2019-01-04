@@ -36,7 +36,8 @@ import {
   FaUsers,
   FaDoorOpen,
   FaReceipt,
-  FaGlobe
+  FaGlobe,
+  FaCog
 } from "react-icons/fa";
 import logo from "./logo.svg";
 
@@ -95,6 +96,15 @@ const navLinks = [
       </>
     ),
     to: "/logs"
+  },
+  {
+    label: (
+      <>
+        <FaCog/>
+        Settings
+      </>
+    ),
+    to: "/settings"
   }
 ];
 
