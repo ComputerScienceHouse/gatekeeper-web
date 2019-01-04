@@ -63,30 +63,25 @@ class UserForm extends React.Component<UserFormProps> {
     const { user } = this.props;
     const isUpdate = user != null;
 
-    const formFields: {
+    let formFields: {
       username: string,
       firstName: string,
       lastName: string,
       email: string
-    } = {
-      username: "",
-      firstName: "",
-      lastName: "",
-      email: ""
-    };
+    } | null = null;
 
     if (isUpdate) {
-      Object.assign(formFields, {
+      formFields = {
         username: user!.username,
         firstName: user!.firstName,
         lastName: user!.lastName,
         email: user!.email
-      });
+      };
     }
 
     return (
       <ResourceForm
-        fields={formFields}
+        fields={formFields || undefined}
         validationSchema={Yup.object().shape({
           username: Yup.string().required("A username for the user is required."),
           firstName: Yup.string(),

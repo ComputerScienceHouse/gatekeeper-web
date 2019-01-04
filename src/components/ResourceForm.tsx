@@ -30,7 +30,8 @@ import {
 } from "reactstrap";
 import {
   FaCheck,
-  FaTrashAlt
+  FaTrashAlt,
+  FaTimes
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { Mutation, MutationFn } from "react-apollo";
@@ -43,9 +44,9 @@ type ResourceFormProps<T> = {
   fields?: T;
   validationSchema: any | (() => any);
   mutations: {
-    create: DocumentNode;
+    create?: DocumentNode;
     update: DocumentNode;
-    delete: DocumentNode;
+    delete?: DocumentNode;
   },
   baseUrl: string;
   resourceName: string;
@@ -58,15 +59,17 @@ type ResourceFormProps<T> = {
 class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
   public render() {
     const {
-      id,
       fields,
       validationSchema,
       mutations
     } = this.props;
-    const isUpdate = fields != null && id != null;
+    const isUpdate = fields != null;
+    if (!isUpdate && !mutations.create) {
+      throw new Error("A create mutation must be provided for a ResourceForm without fields.");
+    }
 
     return (
-      <Mutation mutation={isUpdate ? mutations.update : mutations.create}>
+      <Mutation mutation={isUpdate ? mutations.update : mutations.create!}>
         {(mutateResource) => (
           <Formik
             initialValues={fields}
@@ -81,38 +84,44 @@ class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
 
   private handleSubmit = (values: T | undefined, { setSubmitting }: FormikActions<T | undefined>, mutateResource: MutationFn) => {
     const { fields, id, baseUrl, fieldName, resourceName, history } = this.props;
-    const isUpdate = fields != null && id != null;
+    const isUpdate = fields != null;
 
     const variables: { input: any } = {
       input: values || {}
     };
 
-    if (isUpdate) {
-      variables.input.id = id!;
+    if (isUpdate && id != null) {
+      variables.input.id = id;
     }
 
     mutateResource({ variables })
       .then(({ data }: any) => {
-        if (isUpdate) {
-          // Return to the resource list
-          history.push(baseUrl);
+        if (data.mutated.ok === true) {
+          setSubmitting(false);
+
+          if (isUpdate) {
+            // Return to the resource list
+            history.push(baseUrl);
+          } else {
+            // Redirect to the newly created resource
+            history.push(`${baseUrl}/${data.mutated[fieldName]!.id}`);
+          }
+
           toast.success((
             <>
               <FaCheck/>
-              {resourceName} successfully updated.
+              {resourceName} successfully {isUpdate ? "updated" : "created"}.
             </>
           ));
         } else {
-          // Redirect to the newly created resource, if successful
-          if (data.mutated[fieldName] != null && data.mutated[fieldName]!.id != null) {
-            history.push(`${baseUrl}/${data.mutated[fieldName]!.id}`);
-            toast.success((
-              <>
-                <FaCheck/>
-                {resourceName} successfully created.
-              </>
-            ));
-          }
+          // TODO: Handle server-side errors
+          setSubmitting(false);
+          toast.error((
+            <>
+              <FaTimes/>
+              Failed to {isUpdate ? "update" : "create"} {resourceName}.
+            </>
+          ));
         }
       })
       .catch((error: Error) => {
@@ -140,13 +149,14 @@ class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
   };
 
   private renderFormBody = (formikBag: FormikProps<T | undefined>) => {
-    const { fields, id, displayName, render, resourceName, mutations } = this.props;
+    const { fields, displayName, render, resourceName, mutations } = this.props;
     const { errors, isSubmitting, handleSubmit } = formikBag;
-    const isUpdate = fields != null && id != null;
+
+    const isUpdate = fields != null;
 
     return (
       <Form onSubmit={handleSubmit}>
-        <h2>{isUpdate ? `${resourceName}${displayName && `: ${displayName}`}` : `New ${resourceName}`}</h2>
+        <h2>{isUpdate ? `${resourceName}${displayName != null ? `: ${displayName}` : ""}` : `New ${resourceName}`}</h2>
         <Card>
           <CardBody>
             {render(formikBag)}
@@ -161,7 +171,7 @@ class ResourceForm<T> extends React.Component<ResourceFormProps<T>> {
               <FaCheck/>
               {isUpdate ? "Update" : "Create"} {resourceName}
             </Button>
-            {isUpdate && (
+            {isUpdate && mutations.delete && (
               <Mutation mutation={mutations.delete}>
                 {(deleteResource) => (
                   <ConfirmDialog

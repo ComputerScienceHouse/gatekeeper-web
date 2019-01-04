@@ -42,7 +42,7 @@ class FormField<T> extends React.PureComponent<FormFieldProps<T>> {
   }
 
   private renderField = (props: FieldProps<T>) => {
-    const { label, render } = this.props;
+    const { name, label, render } = this.props;
     const { form } = props;
 
     return (

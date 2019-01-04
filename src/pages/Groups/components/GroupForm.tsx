@@ -29,6 +29,7 @@ import FormFieldInput from "../../../components/FormFieldInput";
 const createMutation = gql`
   mutation CreateGroup($input: GroupCreateGenericType!) {
     mutated: groupCreate(newGroup: $input) {
+      ok
       group {
         id
       }
@@ -39,6 +40,7 @@ const createMutation = gql`
 const updateMutation = gql`
   mutation UpdateGroup($input: GroupUpdateGenericType!) {
     mutated: groupUpdate(newGroup: $input) {
+      ok
       group {
         id
       }
@@ -63,21 +65,19 @@ class GroupForm extends React.Component<GroupFormProps> {
     const { group } = this.props;
     const isUpdate = group != null;
 
-    const formFields: {
+    let formFields: {
       name: string
-    } = {
-      name: ""
-    };
+    } | null = null;
 
     if (isUpdate) {
-      Object.assign(formFields, {
+      formFields = {
         name: group!.name
-      });
+      };
     }
 
     return (
       <ResourceForm
-        fields={formFields}
+        fields={formFields || undefined}
         validationSchema={Yup.object().shape({
           name: Yup.string().required("A name for the group is required.")
         })}

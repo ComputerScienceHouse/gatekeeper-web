@@ -36,6 +36,7 @@ import FormFieldInput from "../../../components/FormFieldInput";
 const createMutation = gql`
   mutation CreateAccessPoint($input: AccessPointCreateGenericType!) {
     mutated: accessPointCreate(newAccessPoint: $input) {
+      ok
       accessPoint {
         id
       }
@@ -46,6 +47,7 @@ const createMutation = gql`
 const updateMutation = gql`
   mutation UpdateAccessPoint($input: AccessPointUpdateGenericType!) {
     mutated: accessPointUpdate(newAccessPoint: $input) {
+      ok
       accessPoint {
         id
       }
@@ -70,24 +72,21 @@ class AccessPointForm extends React.Component<AccessPointFormProps> {
     const { accessPoint } = this.props;
     const isUpdate = accessPoint != null;
 
-    const formFields: {
-      name?: string,
-      location?: string
-    } = {
-      name: "",
-      location: ""
-    };
+    let formFields: {
+      name: string,
+      location: string
+    } | null = null;
 
     if (isUpdate) {
-      Object.assign(formFields, {
+      formFields = {
         name: accessPoint!.name,
         location: accessPoint!.location
-      });
+      };
     }
 
     return (
       <ResourceForm
-        fields={formFields}
+        fields={formFields || undefined}
         validationSchema={Yup.object().shape({
           name: Yup.string().required("A name for this access point is required."),
           location: Yup.string().required("A location for this access point is required.")
@@ -129,19 +128,19 @@ class AccessPointForm extends React.Component<AccessPointFormProps> {
         <h4>Groups</h4>
         <Duallist
           available={[
-            { value: 'foo', 'label': 'Foo' },
-            { value: 'bar', 'label': 'Bar' }
+            { value: "foo", "label": "Foo" },
+            { value: "bar", "label": "Bar" }
           ]}
-          selected={['foo']}
+          selected={["foo"]}
           sortable={false}
         />
         <h4>Users</h4>
         <Duallist
           available={[
-            { value: 'foo', 'label': 'Foo' },
-            { value: 'bar', 'label': 'Bar' }
+            { value: "foo", "label": "Foo" },
+            { value: "bar", "label": "Bar" }
           ]}
-          selected={['foo']}
+          selected={["foo"]}
           sortable={false}
         />
       </>

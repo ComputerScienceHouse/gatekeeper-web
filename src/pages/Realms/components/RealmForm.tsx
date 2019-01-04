@@ -30,6 +30,7 @@ import FormFieldInput from "../../../components/FormFieldInput";
 const createMutation = gql`
   mutation CreateRealm($input: RealmCreateGenericType!) {
     mutated: realmCreate(newRealm: $input) {
+      ok
       realm {
         id
       }
@@ -40,6 +41,7 @@ const createMutation = gql`
 const updateMutation = gql`
   mutation UpdateRealm($input: RealmUpdateGenericType!) {
     mutated: realmUpdate(newRealm: $input) {
+      ok
       realm {
         id
       }
@@ -55,6 +57,28 @@ const deleteMutation = gql`
   }
 `;
 
+const createSchema = {
+  name: Yup.string().required("A name for this realm is required."),
+  slot: Yup.number()
+    .integer("The slot number must be an integer.")
+    .min(0, "The slot number must be positive.")
+    .max(14, "The slot number must be less than 15.")
+    .required("A slot between 0-14 for this realm is required.")
+};
+
+const keySchema = (name: string) => Yup.string()
+  .min(32, `The ${name} must be exactly 32 characters.`)
+  .max(32, `The ${name} must be exactly 32 characters.`)
+  .matches(RegExp("^[a-f0-9]+$"), `The ${name} must be a lowercase hex string (a-f, 0-9).`);
+
+const updateSchema = Object.assign({
+  readKey: keySchema("Read Key"),
+  authKey: keySchema("Authentication Key"),
+  updateKey: keySchema("Update Key"),
+  publicKey: Yup.string(),
+  privateKey: Yup.string()
+}, createSchema);
+
 interface RealmFormProps {
   realm?: Realm
 }
@@ -64,7 +88,7 @@ class RealmForm extends React.Component<RealmFormProps> {
     const { realm } = this.props;
     const isUpdate = realm != null;
 
-    const formFields: {
+    let formFields: {
       name?: string,
       slot?: number,
       readKey?: string,
@@ -72,10 +96,10 @@ class RealmForm extends React.Component<RealmFormProps> {
       updateKey?: string,
       publicKey?: string,
       privateKey?: string
-    } = {};
+    } | null = null;
 
     if (isUpdate) {
-      Object.assign(formFields, {
+      formFields = {
         name: realm!.name,
         slot: realm!.slot,
         readKey: realm!.readKey,
@@ -83,25 +107,13 @@ class RealmForm extends React.Component<RealmFormProps> {
         updateKey: realm!.updateKey,
         publicKey: realm!.publicKey,
         privateKey: realm!.privateKey
-      });
+      };
     }
 
     return (
       <ResourceForm
-        fields={formFields}
-        validationSchema={Yup.object().shape({
-          name: Yup.string().required("A name for this realm is required."),
-          slot: Yup.number()
-            .integer("The slot number must be an integer.")
-            .min(0, "The slot number must be positive.")
-            .max(14, "The slot number must be less than 15.")
-            .required("A slot between 0-14 for this realm is required."),
-          readKey: Yup.string(),
-          authKey: Yup.string(),
-          updateKey: Yup.string(),
-          publicKey: Yup.string(),
-          privateKey: Yup.string()
-        })}
+        fields={formFields || undefined}
+        validationSchema={Yup.object().shape(isUpdate ? updateSchema : createSchema)}
         mutations={{
           create: createMutation,
           update: updateMutation,
