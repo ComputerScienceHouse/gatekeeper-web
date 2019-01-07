@@ -23,11 +23,15 @@ import Group from "./Group";
 import AccessPoint from "./AccessPoint";
 import Realm from "./Realm";
 import Configuration from "./Configuration";
+import Tag from "./Tag";
+import TagRealmAssoication from "./TagRealmAssociation";
 
 export {
   User,
   Group,
   AccessPoint,
   Realm,
-  Configuration
+  Configuration,
+  Tag,
+  TagRealmAssoication
 };

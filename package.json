@@ -28,6 +28,7 @@
     "lodash": "^4.17.11",
     "prop-types": "15.x",
     "react": "^16.7.0",
+    "react-albus": "^2.0.0",
     "react-apollo": "^2.3.3",
     "react-dom": "^16.7.0",
     "react-duallist": "^1.1.6",
@@ -35,9 +36,11 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-transition": "^1.2.1",
+    "react-step-progress-bar": "^1.0.3",
     "react-table": "^6.8.6",
     "react-toastify": "^4.5.2",
     "reactstrap": "^7.0.2",
+    "sockette": "^2.0.5",
     "yup": "^0.26.6"
   },
   "devDependencies": {
@@ -47,6 +50,7 @@
     "@types/node": "^10.12.18",
     "@types/prop-types": "^15.5.8",
     "@types/react": "^16.7.18",
+    "@types/react-albus": "^2.0.4",
     "@types/react-dom": "^16.0.11",
     "@types/react-router": "^4.4.3",
     "@types/react-router-dom": "^4.3.1",

@@ -18,16 +18,12 @@
  * along with Gatekeeper.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Variables from "./Variables";
-import NodeResult from "./NodeResult";
-import ListType from "./ListType";
-import MutationResult from "./MutationResult";
-import ErrorType from "./ErrorType";
+import Realm from "./Realm";
+import Tag from "./Tag";
 
-export {
-  Variables,
-  NodeResult,
-  ListType,
-  MutationResult,
-  ErrorType
-};
+export default interface TagRealmAssociation {
+  id: string;
+  lastUsed: string;
+  realm: Realm;
+  tag: Tag;
+}

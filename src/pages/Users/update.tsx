@@ -26,6 +26,7 @@ import UserForm from "./components/UserForm";
 import withErrorBoundary from "../../components/withErrorBoundary";
 import { User } from "../../interfaces/models";
 import { NodeResult } from "../../interfaces/graphql";
+import UserTags from "./components/UserTags";
 
 const query = gql`
   query UserQuery($id: ID!) {
@@ -56,16 +57,23 @@ const UpdateUser = ({ match: routeMatch }: UpdateUserProps) => (
     skip={routeMatch.params.id === "new"}
   >
     {({ loading, error, data }: QueryResult<NodeResult<User>>) => {
+      const isUpdate = routeMatch.params.id !== "new";
+
       if (error) {
         throw error; // Will be caught by error boundary
       }
 
-      if (loading && routeMatch.params.id !== "new") {
+      if (isUpdate && loading) {
         return <span>Loading...</span>;
       }
 
       return (
-        <UserForm user={(data || {}).user}/>
+        <>
+          <UserForm user={(data || {}).user}/>
+          {isUpdate && data && data.user && (
+            <UserTags userId={data.user.id}/>
+          )}
+        </>
       );
     }}
   </Query>

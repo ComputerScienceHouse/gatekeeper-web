@@ -18,16 +18,12 @@
  * along with Gatekeeper.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Variables from "./Variables";
-import NodeResult from "./NodeResult";
-import ListType from "./ListType";
-import MutationResult from "./MutationResult";
 import ErrorType from "./ErrorType";
+import NodeResult from "./NodeResult";
 
-export {
-  Variables,
-  NodeResult,
-  ListType,
-  MutationResult,
-  ErrorType
-};
+type MutationResult<T> = NodeResult<T> & {
+  ok: boolean;
+  errors: ErrorType[];
+}
+
+export default MutationResult;

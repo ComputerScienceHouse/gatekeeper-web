@@ -20,8 +20,9 @@
 
 import React from "react";
 import { toast } from "react-toastify";
-import Stoplight from "../Stoplight";
 import { FaLink, FaUnlink } from "react-icons/fa";
+import Stoplight from "../Stoplight";
+import AdminHelperAPI from "../../api/helper";
 
 const initialState = { ok: false };
 type AdminHelperState = Readonly<typeof initialState>;
@@ -43,20 +44,11 @@ class AdminHelper extends React.Component<{}, AdminHelperState> {
   }
 
   private checkHealth = () => {
-    return fetch("http://127.0.0.1:42069/healthz")
-      .then((resp: Response) => {
-        if (!resp.ok) {
-          throw new Error(`HTTP error (status ${resp.status})`);
-        }
-        return resp.text();
-      })
-      .then((text: string) => {
-        if (!this.state.ok && text === "ok") {
+    return AdminHelperAPI.checkHealth()
+      .then((ok: boolean) => {
+        if (ok && !this.state.ok) {
           this.setState({ ok: true }, this.notify);
-        }
-      })
-      .catch(() => {
-        if (this.state.ok) {
+        } else if (!ok && this.state.ok) {
           this.setState({ ok: false }, this.notify);
         }
       });
