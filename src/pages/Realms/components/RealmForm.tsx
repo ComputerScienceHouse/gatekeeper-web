@@ -71,13 +71,14 @@ const keySchema = (name: string) => Yup.string()
   .max(32, `The ${name} must be exactly 32 characters.`)
   .matches(RegExp("^[a-f0-9]+$"), `The ${name} must be a lowercase hex string (a-f, 0-9).`);
 
-const updateSchema = Object.assign({
+const updateSchema = {
+  ...createSchema,
   readKey: keySchema("Read Key"),
   authKey: keySchema("Authentication Key"),
   updateKey: keySchema("Update Key"),
   publicKey: Yup.string(),
   privateKey: Yup.string()
-}, createSchema);
+};
 
 interface RealmFormProps {
   realm?: Realm

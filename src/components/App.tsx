@@ -26,6 +26,8 @@ import { IconContext } from "react-icons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { jsx, css, Global, ClassNames } from "@emotion/core";
+import { ThemeProvider } from "emotion-theming";
+import Yeti from "../themes/yeti";
 import Dashboard from "../pages/Dashboard/index";
 import Users from "../pages/Users/index";
 import UpdateUser from "../pages/Users/update";
@@ -104,31 +106,33 @@ const App = () => (
       `;
 
       return (
-        <IconContext.Provider value={{ className: globalIconStyle }}>
-          <Global styles={globalStyle}/>
-          <Header/>
-          <Container css={containerStyle}>
-            <AnimatedSwitch {...transition} css={switchStyle}>
-              <Route exact={true} path="/" component={Dashboard}/>
-              <Route exact={true} path="/users" component={Users}/>
-              <Route path="/users/:id" component={UpdateUser}/>
-              <Route exact={true} path="/groups" component={Groups}/>
-              <Route path="/groups/:id" component={UpdateGroup}/>
-              <Route exact={true} path="/access-points" component={AccessPoints}/>
-              <Route path="/access-points/:id" component={UpdateAccessPoint}/>
-              <Route exact={true} path="/realms" component={Realms}/>
-              <Route path="/realms/:id" component={UpdateRealm}/>
-              <Route exact={true} path="/settings" component={Settings}/>
-            </AnimatedSwitch>
-          </Container>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={true}
-            closeButton={false}
-            bodyClassName={toastStyle}
-          />
-        </IconContext.Provider>
+        <ThemeProvider theme={Yeti}>
+          <IconContext.Provider value={{ className: globalIconStyle }}>
+            <Global styles={globalStyle}/>
+            <Header/>
+            <Container css={containerStyle}>
+              <AnimatedSwitch {...transition} css={switchStyle}>
+                <Route exact={true} path="/" component={Dashboard}/>
+                <Route exact={true} path="/users" component={Users}/>
+                <Route path="/users/:id" component={UpdateUser}/>
+                <Route exact={true} path="/groups" component={Groups}/>
+                <Route path="/groups/:id" component={UpdateGroup}/>
+                <Route exact={true} path="/access-points" component={AccessPoints}/>
+                <Route path="/access-points/:id" component={UpdateAccessPoint}/>
+                <Route exact={true} path="/realms" component={Realms}/>
+                <Route path="/realms/:id" component={UpdateRealm}/>
+                <Route exact={true} path="/settings" component={Settings}/>
+              </AnimatedSwitch>
+            </Container>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={true}
+              closeButton={false}
+              bodyClassName={toastStyle}
+            />
+          </IconContext.Provider>
+        </ThemeProvider>
       );
     }}
   </ClassNames>

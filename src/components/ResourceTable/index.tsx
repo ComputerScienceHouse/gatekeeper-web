@@ -19,15 +19,16 @@
  */
 
 import * as React from "react";
-import { Query } from 'react-apollo';
-import { DocumentNode } from 'graphql';
-import { Column } from 'react-table';
-import ResourceTable from './ResourceTable';
-import { Variables } from '../../interfaces/graphql';
+import { Query } from "react-apollo";
+import { DocumentNode } from "graphql";
+import { Column } from "react-table";
+import ResourceTable from "./ResourceTable";
+import { Variables } from "../../interfaces/graphql";
 import withErrorBoundary from "../withErrorBoundary";
 
 interface ResourceTableWrapperProps {
   query: DocumentNode;
+  variables?: Variables | undefined;
   defaultPageSize: number;
   columns: Column[];
   fieldName: string;
@@ -48,6 +49,7 @@ class ResourceTableWrapper extends React.Component<ResourceTableWrapperProps, Re
       }
     };
   }
+
   public refetch = (variables: Variables) => {
     this.setState({ queryVariables: variables });
   };
@@ -55,16 +57,22 @@ class ResourceTableWrapper extends React.Component<ResourceTableWrapperProps, Re
   public render() {
     const {
       query,
+      variables,
       defaultPageSize,
       columns,
       fieldName,
       ...opts
     } = this.props;
 
+    const queryVariables = {
+      ...(variables || {}),
+      ...this.state.queryVariables
+    };
+
     return (
       <Query
         query={query}
-        variables={this.state.queryVariables}
+        variables={queryVariables}
       >
         {({ loading, error, data, fetchMore, updateQuery }) => {
           if (error) {
