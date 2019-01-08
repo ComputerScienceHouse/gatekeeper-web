@@ -3,8 +3,8 @@ import { IssueRequest } from "../interfaces/helper";
 import IssueResponse from "../interfaces/helper/IssueResponse";
 
 export default class AdminHelperAPI {
-  public static checkHealth(): Promise<boolean> {
-    return fetch(`${AdminHelperAPI.BASE_URL}/healthz`)
+  public static checkHealth(service?: string): Promise<boolean> {
+    return fetch(`${AdminHelperAPI.BASE_URL}/healthz${service != null ? `/${service}` : ""}`)
       .then((resp: Response) => {
         if (!resp.ok) {
           throw new Error(`HTTP error (status ${resp.status})`);
@@ -13,6 +13,10 @@ export default class AdminHelperAPI {
       })
       .then((text: string) => text === "ok")
       .catch(() => false);
+  }
+
+  public static checkNFCHealth(): Promise<boolean> {
+    return AdminHelperAPI.checkHealth("nfc");
   }
 
   public static issue(req: IssueRequest): Promise<string> {

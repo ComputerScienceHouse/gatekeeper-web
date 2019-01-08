@@ -24,25 +24,43 @@ interface TagIssueFlowProps {
 }
 
 interface TagIssueFlowState {
+  loading: boolean;
   helperOnline: boolean;
+  nfcConnected: boolean;
   realmIds: string[];
   tagId?: string;
 }
 
 class TagIssueFlow extends Component<TagIssueFlowProps, TagIssueFlowState> {
   public state = {
+    loading: true,
     helperOnline: false,
+    nfcConnected: false,
     realmIds: []
   };
 
   public componentDidMount() {
-    return this.checkHelperHealth();
+    return Promise.all([
+      this.checkHelperHealth(),
+      this.checkNFCHealth()
+    ])
+      .then(() => this.setState({ loading: false }));
   }
 
   public render() {
-    const showCancel = isFunction(this.props.onCancel);
+    if (this.state.loading) {
+      return "Loading...";
+    }
 
-    return this.state.helperOnline ? (
+    if (!this.state.helperOnline) {
+      return this.renderPreflightError("The Admin Helper is required to issue tags. Please install and start the application.");
+    }
+
+    if (!this.state.nfcConnected) {
+      return this.renderPreflightError("Please connect a compatible NFC reader.");
+    }
+
+    return (
       <Wizard>
         <Steps>
           <WizardStep
@@ -55,20 +73,6 @@ class TagIssueFlow extends Component<TagIssueFlowProps, TagIssueFlowState> {
           />
         </Steps>
       </Wizard>
-    ) : (
-      <>
-        {this.renderBody(
-          <Alert color="danger">
-            <FaExclamationTriangle/>
-            The Admin Helper is required to issue tags. Please install and start the application.
-          </Alert>
-        )}
-        {showCancel ? this.renderControls(
-          <Button color="default" onClick={this.props.onCancel}>
-            Cancel
-          </Button>
-        ) : null}
-      </>
     );
   }
 
@@ -83,6 +87,39 @@ class TagIssueFlow extends Component<TagIssueFlowProps, TagIssueFlowState> {
           }
         }
       });
+  };
+
+  private checkNFCHealth = () => {
+    return AdminHelperAPI.checkNFCHealth()
+      .then((ok: boolean) => {
+        if (!this.state.nfcConnected) {
+          if (ok) {
+            this.setState({ nfcConnected: true });
+          } else {
+            setTimeout(this.checkNFCHealth, 2000);
+          }
+        }
+      });
+  };
+
+  private renderPreflightError = (msg: string) => {
+    const showCancel = isFunction(this.props.onCancel);
+
+    return (
+      <>
+        {this.renderBody(
+          <Alert color="danger">
+            <FaExclamationTriangle/>
+            {msg}
+          </Alert>
+        )}
+        {showCancel ? this.renderControls(
+          <Button color="default" onClick={this.props.onCancel}>
+            Cancel
+          </Button>
+        ) : null}
+      </>
+    );
   };
 
   private renderRealmStep = ({ next }: WizardContext) => {
