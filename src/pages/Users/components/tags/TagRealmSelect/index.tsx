@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import { ListType, NodeResult } from "../../../../../interfaces/graphql";
 import { Realm } from "../../../../../interfaces/models";
 import TagRealmSelect from "./TagRealmSelect";
+import Loader from "../../../../../components/Loader";
 
 const query = gql`
   query TagRealmSelectQuery {
@@ -30,7 +31,7 @@ const TagRealmSelectQuery = (props: TagRealmSelectQueryProps) => (
       }
 
       if (loading) {
-        return "Loading...";
+        return <Loader/>;
       }
 
       if (data == null || data.allRealms.totalCount < 1) {

@@ -23,16 +23,24 @@ import { toast } from "react-toastify";
 import { FaLink, FaUnlink } from "react-icons/fa";
 import Stoplight from "../Stoplight";
 import AdminHelperAPI from "../../api/helper";
+import Timeout = NodeJS.Timeout;
 
 const initialState = { ok: false };
 type AdminHelperState = Readonly<typeof initialState>;
 
 class AdminHelper extends React.Component<{}, AdminHelperState> {
   public readonly state: AdminHelperState = initialState;
+  private checkInterval: Timeout | null = null;
 
   public componentDidMount() {
     this.checkHealth();
-    setInterval(this.checkHealth, 5000);
+    this.checkInterval = setInterval(this.checkHealth, 5000);
+  }
+
+  public componentWillUnmount() {
+    if (this.checkInterval != null) {
+      clearInterval(this.checkInterval);
+    }
   }
 
   public render() {

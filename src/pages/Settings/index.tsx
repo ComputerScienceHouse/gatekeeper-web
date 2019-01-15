@@ -25,6 +25,7 @@ import SettingsForm from "./components/SettingsForm";
 import withErrorBoundary from "../../components/withErrorBoundary";
 import { Configuration } from "../../interfaces/models";
 import { NodeResult } from "../../interfaces/graphql";
+import Loader from "../../components/Loader";
 
 const query = gql`
   query SettingsQuery {
@@ -42,7 +43,7 @@ const UpdateSettings = () => (
       }
 
       if (loading) {
-        return <span>Loading...</span>;
+        return <Loader/>;
       }
 
       return (

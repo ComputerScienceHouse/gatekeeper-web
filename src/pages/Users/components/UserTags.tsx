@@ -49,6 +49,7 @@ export default class UserTags extends React.Component<UserTagsProps, UserTagsSta
             renderBody={this.renderModalBody}
             renderControls={this.renderModalFooter}
             onCancel={this.toggleIssueModal}
+            onComplete={this.toggleIssueModal}
           />
         </Modal>
       </>

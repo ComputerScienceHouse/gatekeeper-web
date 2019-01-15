@@ -27,6 +27,7 @@ import withErrorBoundary from "../../components/withErrorBoundary";
 import { User } from "../../interfaces/models";
 import { NodeResult } from "../../interfaces/graphql";
 import UserTags from "./components/UserTags";
+import Loader from "../../components/Loader";
 
 const query = gql`
   query UserQuery($id: ID!) {
@@ -64,7 +65,7 @@ const UpdateUser = ({ match: routeMatch }: UpdateUserProps) => (
       }
 
       if (isUpdate && loading) {
-        return <span>Loading...</span>;
+        return <Loader/>;
       }
 
       return (

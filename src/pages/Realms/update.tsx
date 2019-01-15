@@ -26,6 +26,7 @@ import RealmForm from "./components/RealmForm";
 import withErrorBoundary from "../../components/withErrorBoundary";
 import { Realm } from "../../interfaces/models";
 import { NodeResult } from "../../interfaces/graphql";
+import Loader from "../../components/Loader";
 
 const query = gql`
   query RealmQuery($id: ID!) {
@@ -62,7 +63,7 @@ const UpdateRealm = ({ match: routeMatch }: UpdateRealmProps) => (
       }
 
       if (loading && routeMatch.params.id !== "new") {
-        return <span>Loading...</span>;
+        return <Loader/>;
       }
 
       return (

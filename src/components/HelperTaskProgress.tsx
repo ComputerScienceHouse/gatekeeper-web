@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Progress } from "reactstrap";
+import { Progress, ProgressProps } from "reactstrap";
 
 const TagProgressContainer = styled.div`
   text-align: center;
@@ -10,17 +10,21 @@ const TagProgressLabel = styled.h4`
   padding: 0.5rem;
 `;
 
-interface TagProgressProps {
+type TagProgressProps = ProgressProps & {
   message: string;
   indefinite?: boolean;
   percentage?: number;
 }
 
-const TagProgress = ({ message, indefinite = false, percentage }: TagProgressProps) => (
+const HelperTaskProgress = ({ message, indefinite = false, percentage, ...opts }: TagProgressProps) => (
   <TagProgressContainer>
     <TagProgressLabel>{message}</TagProgressLabel>
-    <Progress animated={indefinite} value={indefinite ? 100 : percentage}/>
+    <Progress
+      animated={indefinite}
+      value={indefinite ? 100 : percentage}
+      {...opts}
+    />
   </TagProgressContainer>
 );
 
-export default TagProgress;
+export default HelperTaskProgress;

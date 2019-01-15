@@ -26,6 +26,7 @@ import AccessPointForm from "./components/AccessPointForm";
 import withErrorBoundary from "../../components/withErrorBoundary";
 import { AccessPoint } from "../../interfaces/models";
 import { NodeResult } from "../../interfaces/graphql";
+import Loader from "../../components/Loader";
 
 const query = gql`
   query AccessPointQuery($id: ID!) {
@@ -58,7 +59,7 @@ const UpdateAccessPoint = ({ match: routeMatch }: UpdateAccessPointProps) => (
       }
 
       if (loading && routeMatch.params.id !== "new") {
-        return <span>Loading...</span>;
+        return <Loader/>;
       }
 
       return (

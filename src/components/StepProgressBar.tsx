@@ -42,7 +42,7 @@ const stepBody = ({ accomplished, index }: StepContext) => (
 );
 
 const StepProgressBar = ({ steps, current }: StepProgressBarProps) => {
-  const percent = clamp((50 * ((2 * current) - 3)) / (steps - 1), 0, 100);
+  const percent = clamp(((current - 1) / (steps - 1) * 100) + 1, 0, 100);
 
   return (
     <ProgressBarContainer>

@@ -26,6 +26,7 @@ import GroupForm from "./components/GroupForm";
 import withErrorBoundary from "../../components/withErrorBoundary";
 import { Group } from "../../interfaces/models";
 import { NodeResult } from "../../interfaces/graphql";
+import Loader from "../../components/Loader";
 
 const query = gql`
   query GroupQuery($id: ID!) {
@@ -59,7 +60,7 @@ const UpdateGroup = ({ match: routeMatch }: UpdateGroupProps) => (
       }
 
       if (loading && routeMatch.params.id !== "new") {
-        return <span>Loading...</span>;
+        return <Loader/>;
       }
 
       return (
