@@ -21,6 +21,8 @@
 import User from "./User";
 
 export default interface Tag {
-  id: string;
+  id: number;
+  externalId: string;
   user: User;
+  uid: string;
 }

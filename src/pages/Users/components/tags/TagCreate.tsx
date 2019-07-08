@@ -63,7 +63,7 @@ class TagIssue extends Component<WithApolloClient<TagIssueProps>> {
     );
   }
 
-  private createTag = async (): Promise<string> => {
+  private createTag = async (): Promise<number> => {
     const { client, userId, onFailure } = this.props;
 
     const data: FetchResult<NodeResult<MutationResult<Tag>>> = await client.mutate({
@@ -89,7 +89,7 @@ class TagIssue extends Component<WithApolloClient<TagIssueProps>> {
     return result.tag.id;
   };
 
-  private associateTag = async (tagId: string): Promise<void> => {
+  private associateTag = async (tagId: number): Promise<void> => {
     const { client, realmIds, onFailure } = this.props;
 
     for (const realmId of realmIds) {

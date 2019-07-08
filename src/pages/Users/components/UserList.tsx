@@ -22,19 +22,20 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Badge } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Column } from "react-table";
 import Avatar from "../../../components/Avatar";
 import ResourceTable from "../../../components/ResourceTable";
 import { User } from "../../../interfaces/models";
 
 const query = gql`
   query UserListQuery(
-  $username_Icontains: String,
-  $email_Icontains: String,
-  $firstName_Icontains: String,
-  $lastName_Icontains: String,
-  $limit: Int,
-  $offset: Int,
-  $ordering: String
+    $username_Icontains: String,
+    $email_Icontains: String,
+    $firstName_Icontains: String,
+    $lastName_Icontains: String,
+    $limit: Int,
+    $offset: Int,
+    $ordering: String
   ) {
     allUsers(
       username_Icontains: $username_Icontains,
@@ -60,10 +61,10 @@ const query = gql`
   }
 `;
 
-const columns = [
+const columns: Column[] = [
   {
     accessor: (user: User) => (
-      <Avatar email={user.email} size={50} />
+      <Avatar email={user.email} size={50}/>
     ),
     Header: "",
     id: "avatar",

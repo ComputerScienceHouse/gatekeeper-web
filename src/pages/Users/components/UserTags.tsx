@@ -15,11 +15,13 @@ interface UserTagsProps {
 
 interface UserTagsState {
   showIssueModal: boolean;
+  refreshTagList: boolean;
 }
 
 export default class UserTags extends React.Component<UserTagsProps, UserTagsState> {
   public state = {
-    showIssueModal: false
+    showIssueModal: false,
+    refreshTagList: false
   };
 
   public render() {
@@ -40,7 +42,7 @@ export default class UserTags extends React.Component<UserTagsProps, UserTagsSta
               Issue Tag
             </Button>
           </h2>
-          <TagList userId={userId}/>
+          <TagList userId={userId} />
         </TagsContainer>
         <Modal isOpen={showIssueModal}>
           <ModalHeader>Issue Tag</ModalHeader>

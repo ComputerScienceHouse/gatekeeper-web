@@ -20,15 +20,24 @@
 
 import gql from "graphql-tag";
 import React from "react";
-import ResourceTable from "../../../../components/ResourceTable";
+import { Button } from "reactstrap";
+import {
+  FaCheck,
+  FaTrashAlt
+} from "react-icons/fa";
+import ResourceTable, { ResourceTableBag } from "../../../../components/ResourceTable";
+import ConfirmDialog from "../../../../components/ConfirmDialog";
 import { Variables } from "../../../../interfaces/graphql";
+import { Tag } from "../../../../interfaces/models";
+import { Mutation } from "react-apollo";
+import { toast } from "react-toastify";
 
 const query = gql`
   query TagListQuery(
-  $userId: ID!,
-  $limit: Int,
-  $offset: Int,
-  $ordering: String
+    $userId: ID!,
+    $limit: Int,
+    $offset: Int,
+    $ordering: String
   ) {
     allTags(
       user: $userId
@@ -40,15 +49,79 @@ const query = gql`
         ordering: $ordering
       ) {
         id
+        externalId
+        uid
       }
     }
   }
 `;
 
-const columns = [
+const deleteTagMutation = gql`
+  mutation DeleteTag($id: ID!) {
+    mutated: tagDelete(id: $id){
+      ok
+    }
+  }
+`;
+
+const columns = ({ refetch }: ResourceTableBag) => [
   {
-    Header: "Tag ID",
-    accessor: "id"
+    Header: "ID",
+    accessor: "externalId"
+  },
+  {
+    Header: "UID",
+    accessor: "uid"
+  },
+  {
+    id: "actions",
+    Header: "Actions",
+    width: 90,
+    accessor: (tag: Tag) => (
+      <Mutation mutation={deleteTagMutation}>
+        {(deleteTag) => {
+          const handleDelete = () => deleteTag({ variables: { id: tag.id } })
+            .then(() => {
+              refetch();
+              toast.success((
+                <>
+                  <FaCheck/>
+                  Tag successfully deleted.
+                </>
+              ));
+            })
+            .catch((error: Error) => {
+              throw error; // Will be caught by error boundary
+            });
+
+          return (
+            <ConfirmDialog
+              title="Confirm Deletion"
+              body="Are you sure you want to delete this tag?"
+              callToAction={(
+                <>
+                  <FaTrashAlt/>
+                  Delete
+                </>
+              )}
+              callToActionColor="danger"
+              onConfirm={handleDelete}
+            >
+              {(toggle) => (
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={toggle}
+                >
+                  <FaTrashAlt/>
+                  Delete
+                </Button>
+              )}
+            </ConfirmDialog>
+          );
+        }}
+      </Mutation>
+    )
   }
 ];
 

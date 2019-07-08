@@ -1,9 +1,11 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import isFunction from "lodash/isFunction";
 import HelperTaskProgress from "./HelperTaskProgress";
 import AdminHelperAPI from "../api/helper";
 import styled from "@emotion/styled";
 import Sockette from "sockette";
+
+const REGEX_ERROR = new RegExp("ERROR|FATAL");
 
 const LogViewer = styled.div`
   height: 300px;
@@ -19,7 +21,7 @@ interface HelperTaskActions {
 
 interface HelperTaskProps {
   message: string;
-  onSuccess?: () => void;
+  onSuccess?: (res?: object) => void;
   onFailure?: () => void;
   children: (actions: HelperTaskActions) => Promise<string | null>;
 }
@@ -42,8 +44,8 @@ class HelperTask extends Component<HelperTaskProps, HelperTaskState> {
   private ws: Sockette | null = null;
 
   public render() {
-    const { message } = this.props;
-    const { showLogViewer, log, result } = this.state;
+    const {message} = this.props;
+    const {showLogViewer, log, result} = this.state;
 
     let color = "primary";
     if (result === "success") {
@@ -65,9 +67,7 @@ class HelperTask extends Component<HelperTaskProps, HelperTaskState> {
   }
 
   public async componentDidMount() {
-    const { children } = this.props;
-    const successRegex = new RegExp("Success", "i");
-    const errorRegex = new RegExp("ERROR|FATAL", "i");
+    const {children} = this.props;
 
     const taskId = await children({
       updateMessage: this.updateMessage
@@ -82,19 +82,21 @@ class HelperTask extends Component<HelperTaskProps, HelperTaskState> {
       maxAttempts: 3,
       onopen: () => {
         this.log("Connected to Admin Helper.\n");
-        this.setState({ showLogViewer: true });
+        this.setState({showLogViewer: true});
       },
-      onmessage: (e: MessageEvent) => {
-        this.log(e.data);
+      onmessage: (m: MessageEvent) => {
+        // Check for the result payload
+        try {
+          const res = JSON.parse(m.data);
+          this.handleSuccess(res);
+        } catch (e) {
+          // Normal text message
+          this.log(m.data);
 
-        // Check for a success message
-        if (e.data.match(successRegex) != null) {
-          this.handleSuccess();
-        }
-
-        // Check for an error message
-        if (e.data.match(errorRegex) != null) {
-          this.handleFailure();
+          // Check for an error message
+          if (m.data.match(REGEX_ERROR) != null) {
+            this.handleFailure();
+          }
         }
       },
       onreconnect: () => this.log("Connection lost. Attempting to reconnect...\n"),
@@ -112,27 +114,27 @@ class HelperTask extends Component<HelperTaskProps, HelperTaskState> {
   }
 
   private updateMessage = (message: string) => {
-    this.setState({ message });
+    this.setState({message});
   };
 
-  private handleSuccess = () => {
-    const { onSuccess } = this.props;
+  private handleSuccess = (res?: object) => {
+    const {onSuccess} = this.props;
 
-    this.setState({ result: "success" }, () => {
+    this.setState({result: "success"}, () => {
       if (this.ws != null) {
         this.ws.close();
       }
 
       if (isFunction(onSuccess)) {
-        onSuccess();
+        onSuccess(res);
       }
     });
   };
 
   private handleFailure = () => {
-    const { onFailure } = this.props;
+    const {onFailure} = this.props;
 
-    this.setState({ result: "failed" }, () => {
+    this.setState({result: "failed"}, () => {
       if (this.ws != null) {
         this.ws.close();
       }

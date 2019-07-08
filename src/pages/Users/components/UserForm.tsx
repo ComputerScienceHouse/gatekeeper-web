@@ -29,6 +29,7 @@ import FormFieldInput from "../../../components/FormFieldInput";
 const createMutation = gql`
   mutation CreateUser($input: UserCreateGenericType!) {
     mutated: userCreate(newUser: $input) {
+      ok
       user {
         id
       }
@@ -39,9 +40,7 @@ const createMutation = gql`
 const updateMutation = gql`
   mutation UpdateUser($input: UserUpdateGenericType!) {
     mutated: userUpdate(newUser: $input) {
-      user {
-        id
-      }
+      ok
     }
   }
 `;

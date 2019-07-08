@@ -26,11 +26,15 @@ import ResourceTable from "./ResourceTable";
 import { Variables } from "../../interfaces/graphql";
 import withErrorBoundary from "../withErrorBoundary";
 
+export interface ResourceTableBag {
+  refetch: () => void;
+}
+
 interface ResourceTableWrapperProps {
   query: DocumentNode;
   variables?: Variables | undefined;
   defaultPageSize: number;
-  columns: Column[];
+  columns: Column[] | ((rtBag: ResourceTableBag) => Column[]);
   fieldName: string;
 }
 
@@ -74,7 +78,7 @@ class ResourceTableWrapper extends React.Component<ResourceTableWrapperProps, Re
         query={query}
         variables={queryVariables}
       >
-        {({ loading, error, data, fetchMore, updateQuery }) => {
+        {({ loading, error, data, fetchMore, updateQuery, refetch }) => {
           if (error) {
             throw error; // Will be caught by error boundary
           }
@@ -86,7 +90,7 @@ class ResourceTableWrapper extends React.Component<ResourceTableWrapperProps, Re
               fetchMore={fetchMore}
               updateQuery={updateQuery}
               refetch={this.refetch}
-              columns={columns}
+              columns={typeof columns === "function" ? columns({ refetch }) : columns}
               defaultPageSize={defaultPageSize}
               fieldName={fieldName}
               {...opts}

@@ -31,8 +31,8 @@ const configQuery = gql`
 
 const realmDataQuery = gql`
   query RealmDataQuery(
-  $tagId: ID!,
-  $realmId: ID!
+    $tagId: ID!,
+    $realmId: ID!
   ) {
     realm(id: $realmId) {
       id
@@ -46,7 +46,7 @@ const realmDataQuery = gql`
     }
     allTagRealmAssociations(tag: $tagId, realm: $realmId) {
       results {
-        id
+        id: externalId
       }
     }
   }
@@ -295,15 +295,15 @@ class TagIssueFlow extends Component<WithApolloClient<TagIssueFlowProps>, TagIss
       systemSecret: config.systemSecret
     };
 
-    this.setState({ issueRequest });
+    this.setState({ tagId, issueRequest });
   };
 
   private renderIssueStep = ({ next }: WizardContext) => {
     const { onCancel } = this.props;
-    const { failed, issueRequest } = this.state;
+    const { failed, tagId, issueRequest } = this.state;
     const showClose = isFunction(onCancel);
 
-    if (issueRequest == null) {
+    if (tagId == null || issueRequest == null) {
       return this.renderBody(<Loader/>);
     }
 
@@ -313,6 +313,7 @@ class TagIssueFlow extends Component<WithApolloClient<TagIssueFlowProps>, TagIss
           <>
             <StepProgressBar steps={5} current={3}/>
             <TagIssue
+              tagId={tagId}
               issueRequest={issueRequest}
               onSuccess={next}
               onFailure={this.handleFailure}
