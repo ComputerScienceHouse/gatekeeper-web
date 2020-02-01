@@ -33,7 +33,7 @@ const query = gql`
     group(id: $id) {
       id
       name
-      userSet {
+      user {
         username
       }
     }

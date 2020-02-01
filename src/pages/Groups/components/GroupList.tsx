@@ -43,7 +43,7 @@ const query = gql`
       ) {
         id
         name
-        userSet {
+        user {
           username
         }
       }
@@ -62,7 +62,7 @@ const columns = [
   {
     Header: "Members",
     accessor: (group: Group) => {
-      return group.userSet.map(user => user.username);
+      return group.user.map(user => user.username);
     },
     Cell: (row: RowRenderProps) => row.value.join(", "),
     id: "members",
