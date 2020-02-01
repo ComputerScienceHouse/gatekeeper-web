@@ -20,7 +20,7 @@
 
 import gql from "graphql-tag";
 import * as React from "react";
-import { Query, QueryResult } from "react-apollo";
+import { Query, QueryResult } from "@apollo/react-components";
 import { match } from "react-router";
 import UserForm from "./components/UserForm";
 import withErrorBoundary from "../../components/withErrorBoundary";

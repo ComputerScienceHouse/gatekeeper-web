@@ -1,5 +1,5 @@
 import React from "react";
-import { Query, QueryResult } from "react-apollo";
+import { Query, QueryResult } from "@apollo/react-components";
 import { Alert } from "reactstrap";
 import gql from "graphql-tag";
 import { ListType, NodeResult } from "../../../../../interfaces/graphql";

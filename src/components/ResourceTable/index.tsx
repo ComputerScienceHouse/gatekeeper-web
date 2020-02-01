@@ -19,7 +19,7 @@
  */
 
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/react-components";
 import { DocumentNode } from "graphql";
 import { Column } from "react-table";
 import ResourceTable from "./ResourceTable";

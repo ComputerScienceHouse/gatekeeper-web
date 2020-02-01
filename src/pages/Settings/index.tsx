@@ -20,7 +20,7 @@
 
 import gql from "graphql-tag";
 import * as React from "react";
-import { Query, QueryResult } from "react-apollo";
+import { Query, QueryResult } from "@apollo/react-components";
 import SettingsForm from "./components/SettingsForm";
 import withErrorBoundary from "../../components/withErrorBoundary";
 import { Configuration } from "../../interfaces/models";

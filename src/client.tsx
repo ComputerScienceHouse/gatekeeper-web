@@ -21,7 +21,7 @@
 import React from "react";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { ApolloProvider } from "react-apollo";
+import { ApolloProvider } from "@apollo/react-hooks";
 import { hydrate } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./components/App";

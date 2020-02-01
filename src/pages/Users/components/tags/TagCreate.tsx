@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FetchResult, withApollo, WithApolloClient } from "react-apollo";
+import { withApollo, WithApolloClient, ApolloQueryResult } from "@apollo/react-hoc";
 import gql from "graphql-tag";
 import isFunction from "lodash/isFunction";
 import { NodeResult, MutationResult } from "../../../../interfaces/graphql";
@@ -66,7 +66,7 @@ class TagIssue extends Component<WithApolloClient<TagIssueProps>> {
   private createTag = async (): Promise<string> => {
     const { client, userId, onFailure } = this.props;
 
-    const data: FetchResult<NodeResult<MutationResult<Tag>>> = await client.mutate({
+    const data: ApolloQueryResult<NodeResult<MutationResult<Tag>>> = await client.mutate({
       mutation: tagCreateMutation,
       variables: {
         input: {
@@ -93,7 +93,7 @@ class TagIssue extends Component<WithApolloClient<TagIssueProps>> {
     const { client, realmIds, onFailure } = this.props;
 
     for (const realmId of realmIds) {
-      const data: FetchResult<NodeResult<MutationResult<TagRealmAssociation>>> = await client.mutate({
+      const data: ApolloQueryResult<NodeResult<MutationResult<TagRealmAssociation>>> = await client.mutate({
         mutation: associateTagMutation,
         variables: {
           input: {

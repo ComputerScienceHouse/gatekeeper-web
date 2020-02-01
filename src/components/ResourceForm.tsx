@@ -34,7 +34,7 @@ import {
   FaTimes
 } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { Mutation, MutationFn } from "react-apollo";
+import { Mutation, MutationFn } from "@apollo/react-components";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Formik, FormikActions, FormikProps } from "formik";
 import ConfirmDialog from "./ConfirmDialog";

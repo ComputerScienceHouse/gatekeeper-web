@@ -21,5 +21,11 @@
 'use strict';
 
 module.exports = {
+  modify: (config) => {
+    // Allow ES6 modules in node_modules
+    delete config.externals;
+
+    return config;
+  },
   plugins: ['typescript'],
 };

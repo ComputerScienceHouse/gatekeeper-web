@@ -143,7 +143,7 @@ export default class ResourceTable<T> extends React.Component<ResourceTableProps
 
   public render() {
     const {
-      data,
+      data = {},
       loading,
       columns,
       fieldName,
