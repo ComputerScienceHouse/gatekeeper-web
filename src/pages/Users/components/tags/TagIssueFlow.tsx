@@ -16,7 +16,7 @@ import Loader from "../../../../components/Loader";
 import gql from "graphql-tag";
 import { Configuration, Realm, TagRealmAssoication } from "../../../../interfaces/models";
 import { IssueRequest, Realm as IssueRequestRealm } from "../../../../interfaces/helper";
-import { FetchResult, withApollo, WithApolloClient } from "react-apollo";
+import { withApollo, WithApolloClient, ApolloQueryResult } from "@apollo/react-hoc";
 import { ListType, NodeResult } from "../../../../interfaces/graphql";
 import TagVerify from "./TagVerify";
 import TagCreate from "./TagCreate";
@@ -387,7 +387,7 @@ class TagIssueFlow extends Component<WithApolloClient<TagIssueFlowProps>, TagIss
   private getConfig = async (): Promise<Configuration> => {
     const { client } = this.props;
 
-    const data: FetchResult<NodeResult<Configuration>> = await client.query({
+    const data: ApolloQueryResult<NodeResult<Configuration>> = await client.query({
       query: configQuery
     });
 
@@ -397,7 +397,7 @@ class TagIssueFlow extends Component<WithApolloClient<TagIssueFlowProps>, TagIss
   private getRealmData = async (realmId: string, tagId: string): Promise<IssueRequestRealm> => {
     const { client } = this.props;
 
-    const data: FetchResult<{
+    const data: ApolloQueryResult<{
       realm: Realm,
       allTagRealmAssociations: ListType<TagRealmAssoication>
     }> = await client.query({
